@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <top>
+      <FlowPane BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <ButtonBar buttonMinWidth="85.0" prefHeight="40.0">
+              <buttons>
+                  <Button fx:id="buttonTakeOff" mnemonicParsing="false" style="-fx-background-color: grey;" text="Take-off" />
+                  <Button fx:id="buttonUp" mnemonicParsing="false" style="-fx-background-color: grey;" text="Up" />
+                  <Button fx:id="buttonMoveLeft" mnemonicParsing="false" style="-fx-background-color: grey;" text="Move L" />
+                  <Button fx:id="buttonMoveRight" mnemonicParsing="false" style="-fx-background-color: grey;" text="Move R" />
+                  <Button fx:id="buttonMoveForward" mnemonicParsing="false" style="-fx-background-color: grey;" text="Forward" />
+                  <Button fx:id="buttonFlipLeft" mnemonicParsing="false" style="-fx-background-color: grey;" text="Flip Left" />
+              </buttons>
+               <FlowPane.margin>
+                  <Insets />
+               </FlowPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </ButtonBar>
+            <ButtonBar buttonMinWidth="85.0" prefHeight="40.0" prefWidth="200.0">
+              <buttons>
+                  <Button fx:id="buttonLand" mnemonicParsing="false" style="-fx-background-color: grey;" text="Land" />
+                  <Button fx:id="buttonDown" mnemonicParsing="false" style="-fx-background-color: grey;" text="Down" />
+                  <Button fx:id="buttonRotateLeft" mnemonicParsing="false" style="-fx-background-color: grey;" text="Rotate L" />
+                  <Button fx:id="buttonRotateRight" mnemonicParsing="false" style="-fx-background-color: grey;" text="Rotate R" />
+                  <Button fx:id="buttonMoveBack" mnemonicParsing="false" style="-fx-background-color: grey;" text="Back" />
+                  <Button fx:id="buttonFlipRight" mnemonicParsing="false" style="-fx-background-color: grey;" text="Flip Right" />
+              </buttons>
+            </ButtonBar>
+         </children>
+      </FlowPane>
+   </top>
+   <bottom>
+      <FlowPane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView prefHeight="75.0" prefWidth="600.0">
+              <columns>
+                <TableColumn fx:id="tableColumnFromIP" prefWidth="100.0" text="From IP" />
+                <TableColumn fx:id="tableColumnFromPort" prefWidth="100.0" text="From Port" />
+                  <TableColumn fx:id="tableColumnToIP" prefWidth="100.0" text="To IP" />
+                  <TableColumn fx:id="tableColumnToPort" prefWidth="100.0" text="To Port" />
+                  <TableColumn fx:id="tableColumnASCII" prefWidth="100.0" text="ASCII" />
+                  <TableColumn fx:id="tableColumnHEX" prefWidth="100.0" text="HEX" />
+              </columns>
+            </TableView>
+         </children></FlowPane>
+   </bottom>
+   <right>
+      <GridPane prefHeight="271.0" prefWidth="62.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="241.0" minHeight="10.0" prefHeight="241.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Slider fx:id="sliderAltitude" disable="true" orientation="VERTICAL" prefHeight="241.0" prefWidth="63.0" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </Slider>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Altitude" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </right>
+   <center>
+      <Canvas fx:id="canvasCanvas" height="250.0" width="500.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin></Canvas>
+   </center>
+</BorderPane>
