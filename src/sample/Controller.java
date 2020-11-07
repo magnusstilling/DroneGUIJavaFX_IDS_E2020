@@ -1,10 +1,13 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
+
+import java.awt.*;
 
 public class Controller {
     public Button buttonTakeOff;
@@ -29,15 +32,23 @@ public class Controller {
     public Canvas canvasCanvas;
     private GraphicsContext graphicsContext;
 
+    /*
     public void draw(GraphicsContext graphicsContext) {
+        GraphicsContext canvas = canvasCanvas.getGraphicsContext2D();
         graphicsContext.strokeOval(50,50,50,50);
     }
+
+     */
 
     public void initialize() {
         // runs when application GUI is ready
         System.out.println("ready!");
 
-        //graphicsContext canvas = canvasCanvas.getGraphicsContext2D();
+        graphicsContext = canvasCanvas.getGraphicsContext2D();
+
+        graphicsContext.fillRect(50,50,50,50);
+
+        Runnable target; //hvad gør den!?
 
     }
 }
