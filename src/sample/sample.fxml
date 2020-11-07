@@ -21,7 +21,7 @@
               <buttons>
                   <Button fx:id="buttonTakeOff" mnemonicParsing="false" style="-fx-background-color: grey;" text="Take-off" />
                   <Button fx:id="buttonUp" mnemonicParsing="false" style="-fx-background-color: grey;" text="Up" />
-                  <Button fx:id="buttonMoveLeft" mnemonicParsing="false" style="-fx-background-color: grey;" text="Move L" />
+                  <Button fx:id="buttonMoveLeft" mnemonicParsing="false" onMouseClicked="#moveLeft" style="-fx-background-color: grey;" text="Move L" />
                   <Button fx:id="buttonMoveRight" mnemonicParsing="false" style="-fx-background-color: grey;" text="Move R" />
                   <Button fx:id="buttonMoveForward" mnemonicParsing="false" style="-fx-background-color: grey;" text="Forward" />
                   <Button fx:id="buttonFlipLeft" mnemonicParsing="false" style="-fx-background-color: grey;" text="Flip Left" />
