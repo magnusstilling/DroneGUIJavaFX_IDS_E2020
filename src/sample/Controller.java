@@ -42,6 +42,7 @@ public class Controller {
     int y = 50;
     int w = 50;
     int h = 50;
+    int altitude = 0;
 
     public void initialize() {
         // runs when application GUI is ready
@@ -53,10 +54,19 @@ public class Controller {
 
         Runnable target; //hvad gør den!?
 
+        System.out.println(sliderAltitude.getValue());
+
     }
 
-    public void buttonClicked(MouseEvent mouseEvent){
-
+    public void takeOff(MouseEvent mouseEvent) {
+        x -= 5;
+        y += 5;
+        w += 10;
+        h += 10;
+        altitude = 5;
+        graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
+        graphicsContext.fillRect(x, y, w, h);
+        sliderAltitude.setValue(altitude);
     }
 
     public void moveLeft(MouseEvent mouseEvent) {
@@ -64,4 +74,53 @@ public class Controller {
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
     }
+
+    public void moveRight(MouseEvent mouseEvent) {
+        x += 10;
+        graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
+        graphicsContext.fillRect(x, y, w, h);
+    }
+
+    public void moveBack(MouseEvent mouseEvent) {
+        y += 10;
+        graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
+        graphicsContext.fillRect(x, y, w, h);
+    }
+
+    public void moveForward(MouseEvent mouseEvent) {
+        y -= 10;
+        graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
+        graphicsContext.fillRect(x, y, w, h);
+    }
+
+    public void rotateRight(MouseEvent mouseEvent) {
+    }
+
+    public void rotateLeft(MouseEvent mouseEvent) {
+    }
+
+    public void moveDown(MouseEvent mouseEvent) {
+        altitude -= 5;
+        sliderAltitude.setValue(altitude);
+    }
+
+    public void flipLeft(MouseEvent mouseEvent) {
+    }
+
+    public void moveUp(MouseEvent mouseEvent) {
+        altitude += 5;
+        sliderAltitude.setValue(altitude);
+    }
+
+    public void land(MouseEvent mouseEvent) {
+        x += 5;
+        y -= 5;
+        w -= 10;
+        h -= 10;
+        altitude = 0;
+        graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
+        graphicsContext.fillRect(x, y, w, h);
+        sliderAltitude.setValue(altitude);
+    }
+
 }
