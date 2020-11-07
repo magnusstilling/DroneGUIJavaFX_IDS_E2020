@@ -49,7 +49,7 @@
    <bottom>
       <FlowPane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView prefHeight="75.0" prefWidth="600.0">
+            <TableView fx:id="tableViewColumns" prefHeight="75.0" prefWidth="600.0">
               <columns>
                 <TableColumn fx:id="tableColumnFromIP" prefWidth="100.0" text="From IP" />
                 <TableColumn fx:id="tableColumnFromPort" prefWidth="100.0" text="From Port" />
