@@ -2,13 +2,13 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.net.DatagramSocket;
@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class Controller {
+public class Controller{
     public Button buttonTakeOff;
     public Button buttonFlipLeft;
     public Button buttonUp;
@@ -40,27 +40,19 @@ public class Controller {
     public TableView tableViewColumns;
     private GraphicsContext graphicsContext;
 
-    private ObservableList<UdpPackage> savedPackages = FXCollections.observableArrayList();
     private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
 
     private UdpPackageReceiver receiver;
     private DatagramSocket sender;
+    private UdpPackage packet;
 
-    int x = 50;
-    int y = 50;
-    int w = 50;
-    int h = 50;
-    int altitude = 0;
-
+    int x = 50, y = 50, w = 50, h = 50, altitude = 0;
+    int toPort = 6000;
+    boolean running = false;
     public void initialize() throws UnknownHostException {
         // runs when application GUI is ready
         /*UDP*/
-        System.out.println("creates list of packages");
-        UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
-        UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
-        loggedPackages.addAll(test1, test2);
-        savedPackages.addAll(test1, test2);
-
+        this.running = true;
         //add list of items to table
         tableViewColumns.setItems(loggedPackages);
 
@@ -86,7 +78,7 @@ public class Controller {
         );
 
         //add udp server/receiver
-        receiver = new UdpPackageReceiver(loggedPackages, 6000);
+        receiver = new UdpPackageReceiver(loggedPackages, toPort);
         new Thread(receiver).start();
 
         //create udp sender
@@ -103,13 +95,13 @@ public class Controller {
 
         graphicsContext.fillRect(x, y, w, h);
 
-        Runnable target; //hvad gør den!?
+        Runnable target;
 
         System.out.println(sliderAltitude.getValue());
 
     }
 
-    public void takeOff(MouseEvent mouseEvent) {
+    public void takeOff(ActionEvent actionEvent) throws UnknownHostException {
         x -= 5;
         y += 5;
         w += 10;
@@ -118,52 +110,68 @@ public class Controller {
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
         sliderAltitude.setValue(altitude);
+        droneCommand("takeoff");
+
     }
 
-    public void moveLeft(MouseEvent mouseEvent) {
+    public void moveLeft(MouseEvent mouseEvent) throws UnknownHostException {
         x -= 10;
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
+        droneCommand("left 40");
     }
 
-    public void moveRight(MouseEvent mouseEvent) {
+    public void moveRight(MouseEvent mouseEvent) throws UnknownHostException {
         x += 10;
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
+        droneCommand("right 40");
     }
 
-    public void moveBack(MouseEvent mouseEvent) {
+    public void moveBack(MouseEvent mouseEvent) throws UnknownHostException {
         y += 10;
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
+        droneCommand("back 40");
     }
 
-    public void moveForward(MouseEvent mouseEvent) {
+    public void moveForward(MouseEvent mouseEvent) throws UnknownHostException {
         y -= 10;
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
+        droneCommand("forward 40");
     }
 
-    public void rotateRight(MouseEvent mouseEvent) {
+    public void rotateRight(MouseEvent mouseEvent) throws UnknownHostException {
+        droneCommand("cw 45");
     }
 
-    public void rotateLeft(MouseEvent mouseEvent) {
+    public void rotateLeft(MouseEvent mouseEvent) throws UnknownHostException {
+        droneCommand("ccw 45");
     }
 
-    public void moveDown(MouseEvent mouseEvent) {
+    public void moveDown(MouseEvent mouseEvent) throws UnknownHostException {
         altitude -= 5;
         sliderAltitude.setValue(altitude);
+
+        droneCommand("down 40");
     }
 
-    public void flipLeft(MouseEvent mouseEvent) {
+    public void flipLeft(MouseEvent mouseEvent) throws UnknownHostException {
+        droneCommand("flip l");
     }
 
-    public void moveUp(MouseEvent mouseEvent) {
+    public void flipRight(MouseEvent mouseEvent) throws UnknownHostException{
+        droneCommand("flip r");
+    }
+
+    public void moveUp(MouseEvent mouseEvent) throws UnknownHostException {
         altitude += 5;
         sliderAltitude.setValue(altitude);
+        droneCommand("up 40");
     }
 
-    public void land(MouseEvent mouseEvent) {
+    public void land(MouseEvent mouseEvent) throws UnknownHostException {
         x += 5;
         y -= 5;
         w -= 10;
@@ -172,6 +180,11 @@ public class Controller {
         graphicsContext.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         graphicsContext.fillRect(x, y, w, h);
         sliderAltitude.setValue(altitude);
+        droneCommand("land");
     }
 
+    public void droneCommand(String command) throws UnknownHostException {
+        UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+        loggedPackages.addAll(takeOffPackage);
+    }
 }

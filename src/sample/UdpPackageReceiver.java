@@ -10,7 +10,7 @@ import java.util.List;
 implementing is more flexible than extending classes since an extension locks the class from implementing something else
 you can only extend on class whereas you can implement multiple functions
 */
-public class UdpPackageReceiver implements Runnable{
+public class UdpPackageReceiver extends Controller implements Runnable{
 
     boolean running = false;
     DatagramSocket socket;
@@ -42,11 +42,13 @@ public class UdpPackageReceiver implements Runnable{
             try {
                 socket.receive(packet);
                 System.out.println("package arrived!");
-                UdpPackage udpPackage = new UdpPackage("name", packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
+                UdpPackage udpPackage = new UdpPackage(packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
                 udpPackages.add(udpPackage);
+                buf = new byte[256];
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 }

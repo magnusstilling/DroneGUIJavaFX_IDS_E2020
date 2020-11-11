@@ -2,7 +2,6 @@ package sample;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UdpPackage {
@@ -14,30 +13,21 @@ public class UdpPackage {
     private int fromPort;
     private int toPort;
 
-    public UdpPackage(String name, String data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
-        this(name, data.getBytes(), fromIp, toIp,  formPort,  toPort);
+    public UdpPackage(String data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
+        this(data.getBytes(), fromIp, toIp,  formPort,  toPort);
     }
 
     public UdpPackage(String name, byte[] data, String fromIp, String toIp, int formPort, int toPort) throws UnknownHostException {
-        this(name, data, InetAddress.getByName(fromIp), InetAddress.getByName(toIp),  formPort,  toPort);
+        this(data, InetAddress.getByName(fromIp), InetAddress.getByName(toIp),  formPort,  toPort);
     }
 
-    public UdpPackage(String name, byte[] data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
-        this.name = name;
+    public UdpPackage(byte[] data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
         this.data = data;
         this.fromIp = fromIp;
         this.toIp = toIp;
         this.fromPort = formPort;
         this.toPort = toPort;
         this.setDate(new Date(System.currentTimeMillis()));
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public byte[] getDataAsBytes() {

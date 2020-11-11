@@ -19,7 +19,7 @@
          <children>
             <ButtonBar buttonMinWidth="85.0" prefHeight="40.0">
               <buttons>
-                  <Button fx:id="buttonTakeOff" mnemonicParsing="false" onMouseClicked="#takeOff" style="-fx-background-color: grey;" text="Take-off" />
+                  <Button fx:id="buttonTakeOff" mnemonicParsing="false" onAction="#takeOff" style="-fx-background-color: grey;" text="Take-off" />
                   <Button fx:id="buttonUp" mnemonicParsing="false" onMouseClicked="#moveUp" style="-fx-background-color: grey;" text="Up" />
                   <Button fx:id="buttonMoveLeft" mnemonicParsing="false" onMouseClicked="#moveLeft" style="-fx-background-color: grey;" text="Move L" />
                   <Button fx:id="buttonMoveRight" mnemonicParsing="false" onMouseClicked="#moveRight" style="-fx-background-color: grey;" text="Move R" />
@@ -40,16 +40,16 @@
                   <Button fx:id="buttonRotateLeft" mnemonicParsing="false" onMouseClicked="#rotateLeft" style="-fx-background-color: grey;" text="Rotate L" />
                   <Button fx:id="buttonRotateRight" mnemonicParsing="false" onMouseClicked="#rotateRight" style="-fx-background-color: grey;" text="Rotate R" />
                   <Button fx:id="buttonMoveBack" mnemonicParsing="false" onMouseClicked="#moveBack" style="-fx-background-color: grey;" text="Back" />
-                  <Button fx:id="buttonFlipRight" mnemonicParsing="false" style="-fx-background-color: grey;" text="Flip Right" />
+                  <Button fx:id="buttonFlipRight" mnemonicParsing="false" onMouseClicked="#flipRight" style="-fx-background-color: grey;" text="Flip Right" />
               </buttons>
             </ButtonBar>
          </children>
       </FlowPane>
    </top>
    <bottom>
-      <FlowPane prefHeight="65.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <FlowPane prefHeight="111.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableViewColumns" prefHeight="75.0" prefWidth="600.0">
+            <TableView fx:id="tableViewColumns" prefHeight="111.0" prefWidth="600.0">
               <columns>
                 <TableColumn fx:id="tableColumnFromIP" prefWidth="100.0" text="From IP" />
                 <TableColumn fx:id="tableColumnFromPort" prefWidth="100.0" text="From Port" />
