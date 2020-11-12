@@ -44,6 +44,7 @@ public class UdpPackageReceiver extends Controller implements Runnable{
                 System.out.println("package arrived!");
                 UdpPackage udpPackage = new UdpPackage(packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
                 udpPackages.add(udpPackage);
+                String msg = udpPackage.getDataAsString();
                 buf = new byte[256];
             } catch (IOException e) {
                 e.printStackTrace();

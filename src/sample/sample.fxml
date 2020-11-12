@@ -19,12 +19,12 @@
          <children>
             <ButtonBar buttonMinWidth="85.0" prefHeight="40.0">
               <buttons>
-                  <Button fx:id="buttonTakeOff" mnemonicParsing="false" onAction="#takeOff" style="-fx-background-color: grey;" text="Take-off" />
-                  <Button fx:id="buttonUp" mnemonicParsing="false" onMouseClicked="#moveUp" style="-fx-background-color: grey;" text="Up" />
-                  <Button fx:id="buttonMoveLeft" mnemonicParsing="false" onMouseClicked="#moveLeft" style="-fx-background-color: grey;" text="Move L" />
-                  <Button fx:id="buttonMoveRight" mnemonicParsing="false" onMouseClicked="#moveRight" style="-fx-background-color: grey;" text="Move R" />
-                  <Button fx:id="buttonMoveForward" mnemonicParsing="false" onMouseClicked="#moveForward" style="-fx-background-color: grey;" text="Forward" />
-                  <Button fx:id="buttonFlipLeft" mnemonicParsing="false" onMouseClicked="#flipLeft" style="-fx-background-color: grey;" text="Flip Left" />
+                  <Button fx:id="buttonTakeOff" mnemonicParsing="false" onMouseClicked="#takeOff" style="-fx-background-color: grey;" text="Take-off" />
+                  <Button fx:id="buttonUp" mnemonicParsing="false" onAction="#moveUp" style="-fx-background-color: grey;" text="Up" />
+                  <Button fx:id="buttonMoveLeft" mnemonicParsing="false" onAction="#moveLeft" style="-fx-background-color: grey;" text="Move L" />
+                  <Button fx:id="buttonMoveRight" mnemonicParsing="false" onAction="#moveRight" style="-fx-background-color: grey;" text="Move R" />
+                  <Button fx:id="buttonMoveForward" mnemonicParsing="false" onAction="#moveForward" style="-fx-background-color: grey;" text="Forward" />
+                  <Button fx:id="buttonFlipLeft" mnemonicParsing="false" onAction="#flipLeft" style="-fx-background-color: grey;" text="Flip Left" />
               </buttons>
                <FlowPane.margin>
                   <Insets />
@@ -35,12 +35,12 @@
             </ButtonBar>
             <ButtonBar buttonMinWidth="85.0" prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                  <Button fx:id="buttonLand" mnemonicParsing="false" onMouseClicked="#land" style="-fx-background-color: grey;" text="Land" />
-                  <Button fx:id="buttonDown" mnemonicParsing="false" onMouseClicked="#moveDown" style="-fx-background-color: grey;" text="Down" />
-                  <Button fx:id="buttonRotateLeft" mnemonicParsing="false" onMouseClicked="#rotateLeft" style="-fx-background-color: grey;" text="Rotate L" />
-                  <Button fx:id="buttonRotateRight" mnemonicParsing="false" onMouseClicked="#rotateRight" style="-fx-background-color: grey;" text="Rotate R" />
-                  <Button fx:id="buttonMoveBack" mnemonicParsing="false" onMouseClicked="#moveBack" style="-fx-background-color: grey;" text="Back" />
-                  <Button fx:id="buttonFlipRight" mnemonicParsing="false" onMouseClicked="#flipRight" style="-fx-background-color: grey;" text="Flip Right" />
+                  <Button fx:id="buttonLand" mnemonicParsing="false" onAction="#land" style="-fx-background-color: grey;" text="Land" />
+                  <Button fx:id="buttonDown" mnemonicParsing="false" onAction="#moveDown" style="-fx-background-color: grey;" text="Down" />
+                  <Button fx:id="buttonRotateLeft" mnemonicParsing="false" onAction="#rotateLeft" style="-fx-background-color: grey;" text="Rotate L" />
+                  <Button fx:id="buttonRotateRight" mnemonicParsing="false" onAction="#rotateRight" style="-fx-background-color: grey;" text="Rotate R" />
+                  <Button fx:id="buttonMoveBack" mnemonicParsing="false" onAction="#moveBack" style="-fx-background-color: grey;" text="Back" />
+                  <Button fx:id="buttonFlipRight" mnemonicParsing="false" onAction="#flipRight" style="-fx-background-color: grey;" text="Flip Right" />
               </buttons>
             </ButtonBar>
          </children>
