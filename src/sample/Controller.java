@@ -1,13 +1,16 @@
 package sample;
 
+import com.sun.security.jgss.GSSUtil;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -44,9 +47,7 @@ public class Controller{
     private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
 
     private UdpPackageReceiver receiver;
-    private ButtonPresser buttonPresser;
     private DatagramSocket sender;
-    private UdpPackage packet;
 
     double x, y, w = 50, h = 50, altitude = 0;
     int toPort = 6000;
@@ -82,9 +83,10 @@ public class Controller{
         );
 
         //add udp server/receiver
-        receiver = new UdpPackageReceiver(loggedPackages, toPort);
+        receiver = new UdpPackageReceiver(loggedPackages, toPort, this);
         new Thread(receiver).start();
-        new Thread(buttonPresser).start();
+
+
 
         //create udp sender
         try {
@@ -205,8 +207,11 @@ public class Controller{
         loggedPackages.addAll(takeOffPackage);
     }
 
-    public void buttonFire(String data){
-        
-
+    public void receiveMsg(String msg) {
+        Event.fireEvent(buttonTakeOff, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+                0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
+                true, true, true, true, true, true, null));
+        System.out.println("fucking fantastisk");
+        System.out.println(msg);
     }
 }
