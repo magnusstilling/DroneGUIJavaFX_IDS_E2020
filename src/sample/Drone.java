@@ -1,14 +1,15 @@
 package sample;
 
-import com.sun.prism.Image;
 import javafx.application.Application;
 
 import java.io.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
-import javax.swing.text.html.ImageView;
+
 
 public class Drone {
 
@@ -17,6 +18,7 @@ public class Drone {
     private double rotationCenterY;
     private int altitude;
     private boolean flying;
+    Image droneImage = new Image("sample/renameDrone.png");
 
 
 
@@ -120,9 +122,11 @@ public class Drone {
 
     public void drawDrone(Canvas canvasCanvas){
 
+
         GraphicsContext droneShape = canvasCanvas.getGraphicsContext2D();
         droneShape.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
-        droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight()); //skal for fanden være et image
+        //droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight()); //skal for fanden være et image
+        droneShape.drawImage(droneImage, this.x, this.y, this.width, this.height);
 
 
     }
@@ -142,7 +146,7 @@ public class Drone {
         droneShape.translate(this.rotationCenterX, this.rotationCenterY);
         droneShape.rotate(angle);
         droneShape.translate(-this.rotationCenterX, -this.rotationCenterY);
-        droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        droneShape.drawImage(droneImage, this.x, this.y, this.width, this.height);
 
     }
 

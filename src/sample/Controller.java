@@ -54,8 +54,8 @@ public class Controller{
     //Drone fields
     double halfWindowWidth = 200;
     double halfWindowHeight = 100;
-    double droneWidth = 20;
-    double droneHeight = 20;
+    double droneWidth = 40;
+    double droneHeight = 40;
     double droneAngle = 0;
     int droneAltitude = 0;
     //DroneObject
