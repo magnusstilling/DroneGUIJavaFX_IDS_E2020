@@ -45,11 +45,11 @@ public class UdpPackageReceiver extends Controller implements Runnable{
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try {
                 socket.receive(packet);
-                sendToGui(new String(packet.getData()));
                 System.out.println("package arrived!");
                 UdpPackage udpPackage = new UdpPackage(packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
                 udpPackages.add(udpPackage);
                 String msg = udpPackage.getDataAsString();
+                sendToGui(new String(packet.getData()),udpPackage);
                 buf = new byte[256];
             } catch (IOException e) {
                 e.printStackTrace();
@@ -58,13 +58,14 @@ public class UdpPackageReceiver extends Controller implements Runnable{
         }
     }
 
-    public void sendToGui(String msg)
+    public void sendToGui(String msg, UdpPackage udpPackage)
     {
         Platform.runLater(
                 new Runnable() {
                     @Override
                     public void run() {
-                        controller.receiveMsg(msg);
+                        controller.receiveMsg(msg,udpPackage);
+
                     }
                 });
 

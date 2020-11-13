@@ -41,6 +41,7 @@ public class Controller{
     public Slider sliderAltitude;
     public Canvas canvasCanvas;
     public TableView tableViewColumns;
+    public TableColumn tableColumnTime;
     private GraphicsContext graphicsContext;
     private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
 
@@ -70,6 +71,9 @@ public class Controller{
         tableViewColumns.setItems(loggedPackages);
 
         //set columns content
+        tableColumnTime.setCellValueFactory(
+                new PropertyValueFactory<UdpPackage,String>("formattedDate")
+        );
         tableColumnASCII.setCellValueFactory(
                 new PropertyValueFactory<UdpPackage, String>("dataAsString")
         );
@@ -88,6 +92,7 @@ public class Controller{
         tableColumnToIP.setCellValueFactory(
                 new PropertyValueFactory<UdpPackage, String>("toIp")
         );
+        tableViewColumns.getSortOrder().add(tableColumnTime);
 
         //add udp server/receiver
         receiver = new UdpPackageReceiver(loggedPackages, toPort, this);
@@ -149,7 +154,7 @@ public class Controller{
         }
     }
 
-    public void moveLeft(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveLeft(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.setX(-10);
             drone.drawDrone(canvasCanvas);
@@ -161,7 +166,7 @@ public class Controller{
         }
     }
 
-    public void moveRight(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveRight(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.setX(10);
             drone.drawDrone(canvasCanvas);
@@ -173,7 +178,7 @@ public class Controller{
         }
     }
 
-    public void moveBack(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveBack(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.setY(10);
             drone.drawDrone(canvasCanvas);
@@ -185,7 +190,7 @@ public class Controller{
         }
     }
 
-    public void moveForward(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveForward(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.setY(-10);
             drone.drawDrone(canvasCanvas);
@@ -197,7 +202,7 @@ public class Controller{
         }
     }
 
-    public void rotateRight(ActionEvent actionEvent) throws UnknownHostException {
+    public void rotateRight(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas, 45, "right");
             droneCommand("cw 45");
@@ -209,7 +214,7 @@ public class Controller{
         }
     }
 
-    public void rotateLeft(ActionEvent actionEvent) throws UnknownHostException {
+    public void rotateLeft(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas,45,"left");
             droneCommand("ccw 45");
@@ -221,7 +226,7 @@ public class Controller{
         }
     }
 
-    public void moveDown(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveDown(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() > 5)) {
             drone.setAltitude(-5);
             drone.drawDrone(canvasCanvas);
@@ -235,7 +240,7 @@ public class Controller{
         }
     }
 
-    public void moveUp(ActionEvent actionEvent) throws UnknownHostException {
+    public void moveUp(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() < 100)) {
             drone.setAltitude(5);
             drone.drawDrone(canvasCanvas);
@@ -248,7 +253,7 @@ public class Controller{
         }
     }
 
-    public void flipLeft(ActionEvent actionEvent) throws UnknownHostException {
+    public void flipLeft(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() >= 50)){
             drone.setX(-50);
             drone.drawDrone(canvasCanvas);
@@ -260,7 +265,7 @@ public class Controller{
         }
     }
 
-    public void flipRight(ActionEvent actionEvent) throws UnknownHostException {
+    public void flipRight(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() >= 50)){
             drone.setX(50);
             drone.drawDrone(canvasCanvas);
@@ -273,7 +278,7 @@ public class Controller{
         }
     }
 
-    public void land(ActionEvent actionEvent) throws UnknownHostException {
+    public void land(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.overWriteAltitude(0);
             drone.setWidth(-drone.getWidth()/2);
@@ -292,18 +297,51 @@ public class Controller{
     public void droneCommand(String command) throws UnknownHostException {
         UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(takeOffPackage);
+        tableViewColumns.getSortOrder().add(tableColumnTime);
     }
 
-    public void receiveMsg(String msg) {
-
-        //takeOff, moveLeft, moveRight, moveBack, moveForward, rotateLeft, rotateRight, moveDown, moveUp, flipLeft, flipRight, land
-
-
-
-        Event.fireEvent(buttonTakeOff, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+    public void buttonFire(Button buttonToFire){
+        Event.fireEvent(buttonToFire, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
                 0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
                 true, true, true, true, true, true, null));
-        System.out.println("fucking fantastisk");
+    }
+    public void receiveMsg(String msg, UdpPackage udpPackage) {
+        //takeOff, moveLeft, moveRight, moveBack, moveForward, rotateLeft, rotateRight, moveDown, moveUp, flipLeft, flipRight, land
+//        Event.fireEvent(buttonRotateLeft, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
+//                0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
+//                true, true, true, true, true, true, null));
+
+        //dynamisk substring boi
+
         System.out.println(msg);
+
+        if (msg.substring(0,7).equals("takeoff")){
+            buttonFire(buttonTakeOff);
+        }else if (msg.substring(0,7).equals("left 40")){
+            buttonFire(buttonMoveLeft);
+        }else if (msg.substring(0,8).equals("right 40")){
+            buttonFire(buttonMoveRight);
+        }else if (msg.substring(0,7).equals("back 40")){
+            buttonFire(buttonMoveBack);
+        }else if (msg.substring(0,10).equals("forward 40")){
+            buttonFire(buttonMoveForward);
+        }else if (msg.substring(0,5).equals("cw 45")){
+            buttonFire(buttonRotateRight);
+        }else if (msg.substring(0,6).equals("ccw 45")){
+            buttonFire(buttonRotateLeft);
+        }else if (msg.substring(0,7).equals("down 40")){
+            buttonFire(buttonDown);
+        }else if (msg.substring(0,5).equals("up 40")){
+            buttonFire(buttonUp);
+        }else if (msg.substring(0,6).equals("flip l")){
+            buttonFire(buttonFlipLeft);
+        }else if (msg.substring(0,6).equals("flip r")){
+            buttonFire(buttonFlipRight);
+        }else if (msg.substring(0,4).equals("land")){
+            buttonFire(buttonLand);
+        }else {
+            System.out.println("The command you sent is not gonna move the drone, dude");
+        }
+        tableViewColumns.getSortOrder().add(tableColumnTime);
     }
 }

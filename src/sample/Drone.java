@@ -1,10 +1,14 @@
 package sample;
 
+import com.sun.prism.Image;
+import javafx.application.Application;
+
+import java.io.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
 
-import java.util.concurrent.TimeUnit;
+import javax.swing.text.html.ImageView;
 
 public class Drone {
 
@@ -13,6 +17,8 @@ public class Drone {
     private double rotationCenterY;
     private int altitude;
     private boolean flying;
+
+
 
     public Drone(double x, double y, double width, double height, double angle, int altitude) {
         this.x = x;
@@ -113,9 +119,12 @@ public class Drone {
     }
 
     public void drawDrone(Canvas canvasCanvas){
+
         GraphicsContext droneShape = canvasCanvas.getGraphicsContext2D();
         droneShape.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
-        droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight()); //skal for fanden være et image
+
+
     }
 
     public void rotateDrone(Canvas canvasCanvas, int angle, String leftOrRight){

@@ -2,6 +2,7 @@ package sample;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UdpPackage {
@@ -12,6 +13,7 @@ public class UdpPackage {
     private InetAddress toIp;
     private int fromPort;
     private int toPort;
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 
     public UdpPackage(String data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
         this(data.getBytes(), fromIp, toIp,  formPort,  toPort);
@@ -28,6 +30,11 @@ public class UdpPackage {
         this.fromPort = formPort;
         this.toPort = toPort;
         this.setDate(new Date(System.currentTimeMillis()));
+    }
+
+    public String getFormattedDate()
+    {
+        return formatter.format(date);
     }
 
     public byte[] getDataAsBytes() {
