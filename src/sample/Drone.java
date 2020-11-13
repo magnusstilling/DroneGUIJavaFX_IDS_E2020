@@ -1,15 +1,8 @@
 package sample;
 
-import javafx.application.Application;
-
-import java.io.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
-
-
 
 public class Drone {
 
@@ -18,9 +11,7 @@ public class Drone {
     private double rotationCenterY;
     private int altitude;
     private boolean flying;
-    Image droneImage = new Image("sample/renameDrone.png");
-
-
+    Image droneImage = new Image("sample/dronePNG.png");
 
     public Drone(double x, double y, double width, double height, double angle, int altitude) {
         this.x = x;
@@ -125,7 +116,6 @@ public class Drone {
 
         GraphicsContext droneShape = canvasCanvas.getGraphicsContext2D();
         droneShape.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
-        //droneShape.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight()); //skal for fanden være et image
         droneShape.drawImage(droneImage, this.x, this.y, this.width, this.height);
 
 

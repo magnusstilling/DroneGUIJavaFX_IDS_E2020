@@ -3,7 +3,6 @@ package sample;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -235,8 +234,7 @@ public class Controller{
             setColor(buttonDown, 1);
         } else{
             setColor(buttonDown, 0);
-            //Logik der gør at den lander hvis altitude gøres mindre end 10?
-            System.out.println("Cannot moveDown further. Drone is too close to the ground");
+            System.out.println("Cannot moveDown. Drone is too close to the ground");
         }
     }
 
@@ -247,9 +245,11 @@ public class Controller{
             droneCommand("up 40");
             sliderAltitude.setValue(drone.getAltitude());
             setColor(buttonUp, 1);
-        } else{
+        } else if(drone.isFlying() && (sliderAltitude.getValue() == 100)){
             setColor(buttonUp, 0);
             System.out.println("WATCH OUT ICARUS!!! THE DRONE IS GETTING TOO CLOSE TO THE SUN!!!");
+        } else{
+            System.out.println("Cannot moveUp. Drone is not flying");
         }
     }
 
@@ -271,7 +271,6 @@ public class Controller{
             drone.drawDrone(canvasCanvas);
             droneCommand("flip r");
             setColor(buttonFlipRight, 1);
-            //drone.flipDrone(canvasCanvas, "right");
         } else{
             setColor(buttonFlipRight, 0);
             System.out.println("Cannot flipRight. Drone is too close to the ground");
@@ -295,8 +294,8 @@ public class Controller{
     }
 
     public void droneCommand(String command) throws UnknownHostException {
-        UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
-        loggedPackages.addAll(takeOffPackage);
+//        UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+//        loggedPackages.addAll(takeOffPackage);
         tableViewColumns.getSortOrder().add(tableColumnTime);
     }
 
@@ -305,16 +304,9 @@ public class Controller{
                 0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
                 true, true, true, true, true, true, null));
     }
+
     public void receiveMsg(String msg, UdpPackage udpPackage) {
-        //takeOff, moveLeft, moveRight, moveBack, moveForward, rotateLeft, rotateRight, moveDown, moveUp, flipLeft, flipRight, land
-//        Event.fireEvent(buttonRotateLeft, new MouseEvent(MouseEvent.MOUSE_CLICKED, 0,
-//                0, 0, 0, MouseButton.PRIMARY, 1, true, true, true, true,
-//                true, true, true, true, true, true, null));
-
-        //dynamisk substring boi
-
-        System.out.println(msg);
-
+        System.out.println(msg + "..");
         if (msg.substring(0,7).equals("takeoff")){
             buttonFire(buttonTakeOff);
         }else if (msg.substring(0,7).equals("left 40")){
@@ -340,7 +332,7 @@ public class Controller{
         }else if (msg.substring(0,4).equals("land")){
             buttonFire(buttonLand);
         }else {
-            System.out.println("The command you sent is not gonna move the drone, dude");
+            System.out.println("Unknown command");
         }
         tableViewColumns.getSortOrder().add(tableColumnTime);
     }
