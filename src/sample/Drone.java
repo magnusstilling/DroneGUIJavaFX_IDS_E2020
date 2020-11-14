@@ -112,13 +112,9 @@ public class Drone {
     }
 
     public void drawDrone(Canvas canvasCanvas){
-
-
         GraphicsContext droneShape = canvasCanvas.getGraphicsContext2D();
         droneShape.clearRect(0, 0, canvasCanvas.getWidth(), canvasCanvas.getHeight());
         droneShape.drawImage(droneImage, this.x, this.y, this.width, this.height);
-
-
     }
 
     public void rotateDrone(Canvas canvasCanvas, int angle, String leftOrRight){

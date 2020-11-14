@@ -8,11 +8,7 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.List;
 
-/*
-implementing is more flexible than extending classes since an extension locks the class from implementing something else
-you can only extend on class whereas you can implement multiple functions
-*/
-public class UdpPackageReceiver extends Controller implements Runnable{
+public class UdpPackageReceiver implements Runnable{
 
     private final Controller controller;
     boolean running = false;
@@ -40,34 +36,28 @@ public class UdpPackageReceiver extends Controller implements Runnable{
 
     @Override
     public void run() {
-        while (running)
-        {
+        while (running) {
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try {
                 socket.receive(packet);
                 System.out.println("package arrived!");
                 UdpPackage udpPackage = new UdpPackage(packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
                 udpPackages.add(udpPackage);
-                String msg = udpPackage.getDataAsString();
-                sendToGui(new String(packet.getData()),udpPackage);
+                sendToControllerClass(new String(packet.getData()));
                 buf = new byte[256];
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
-    public void sendToGui(String msg, UdpPackage udpPackage)
-    {
-        Platform.runLater(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        controller.receiveMsg(msg,udpPackage);
-
-                    }
-                });
-
+    public void sendToControllerClass(String udpDataAsString) {
+        Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    controller.getDataFromUdpPackageReceiver(udpDataAsString);
+                }
+            }
+        );
     }
 }

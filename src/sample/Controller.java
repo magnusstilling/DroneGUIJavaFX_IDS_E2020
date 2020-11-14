@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+
 public class Controller{
     //Javafx fields
     public Button buttonTakeOff;
@@ -53,19 +54,18 @@ public class Controller{
     //Drone fields
     double halfWindowWidth = 200;
     double halfWindowHeight = 100;
-    double droneWidth = 40;
-    double droneHeight = 40;
+    double initialDroneWidth = 40;
+    double initialDroneHeight = 40;
     double droneAngle = 0;
     int droneAltitude = 0;
     //DroneObject
-    private Drone drone = new Drone(halfWindowWidth, halfWindowHeight, droneWidth, droneHeight, droneAngle, droneAltitude);
+    private Drone drone = new Drone(halfWindowWidth, halfWindowHeight, initialDroneWidth, initialDroneHeight, droneAngle, droneAltitude);
 
 
 
     public void initialize() throws UnknownHostException {
         // runs when application GUI is ready
-        /*UDP*/
-        this.running = true;
+
         //add list of items to table
         tableViewColumns.setItems(loggedPackages);
 
@@ -93,7 +93,7 @@ public class Controller{
         );
         tableViewColumns.getSortOrder().add(tableColumnTime);
 
-        //add udp server/receiver
+        //add udp server/receiver for updating table views and receiving UDP packages
         receiver = new UdpPackageReceiver(loggedPackages, toPort, this);
         new Thread(receiver).start();
 
@@ -105,28 +105,30 @@ public class Controller{
         }
 
         /*Graphics*/
-        System.out.println("ready!");
 
         graphicsContext = canvasCanvas.getGraphicsContext2D();
 
+        //First drawing of the drone
         drone.drawDrone(canvasCanvas);
-
-        Runnable target;
-
-        System.out.println(sliderAltitude.getValue());
     }
 
+    /**
+     * Method for momentarily indicating which button is pressed, and if it is legal or not
+     * @param buttonColorChange Event fired button from the GUI
+     * @param isButtonActionLegal 0 = not legal / 1 = legal
+     *                            0 shows a red color / 1 shows a green color
+     */
     public void setColor(Button buttonColorChange, int isButtonActionLegal) {
         switch(isButtonActionLegal) {
             case 0:
                 buttonColorChange.setStyle("-fx-background-color: red;");
-                PauseTransition pauseTransition2 = new PauseTransition(Duration.millis(420));
-                pauseTransition2.setOnFinished(event -> buttonColorChange.setStyle("-fx-background-color: grey;"));
-                pauseTransition2.play();
+                PauseTransition pauseTransition = new PauseTransition(Duration.millis(420));
+                pauseTransition.setOnFinished(event -> buttonColorChange.setStyle("-fx-background-color: grey;"));
+                pauseTransition.play();
                 break;
             case 1:
                 buttonColorChange.setStyle("-fx-background-color: green;");
-                PauseTransition pauseTransition = new PauseTransition(Duration.millis(420));
+                pauseTransition = new PauseTransition(Duration.millis(420));
                 pauseTransition.setOnFinished(event -> buttonColorChange.setStyle("-fx-background-color: grey;"));
                 pauseTransition.play();
                 break;
@@ -135,13 +137,11 @@ public class Controller{
 
     }
 
-
     public void takeOff(MouseEvent mouseEvent) throws UnknownHostException {
         if(!drone.isFlying()) {
             drone.setAltitude(50);
-            drone.setWidth(drone.getWidth());
-            drone.setHeight(drone.getHeight());
-
+            drone.setWidth(drone.getWidth()); //Doubles the width of the drone image
+            drone.setHeight(drone.getHeight()); //Doubles the height of the drone image
             drone.drawDrone(canvasCanvas);
             drone.setFlying(true);
             sliderAltitude.setValue(drone.getAltitude());
@@ -204,6 +204,9 @@ public class Controller{
     public void rotateRight(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas, 45, "right");
+            if (drone.getAngle() == 360){
+                drone.overWriteAngle(0);
+            }
             droneCommand("cw 45");
             setColor(buttonRotateRight, 1);
             System.out.println("Drone rotated Right");
@@ -216,6 +219,9 @@ public class Controller{
     public void rotateLeft(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas,45,"left");
+            if (drone.getAngle() == -360){
+                drone.overWriteAngle(0);
+            }
             droneCommand("ccw 45");
             setColor(buttonRotateLeft, 1);
             System.out.println("Drone rotated Left");
@@ -228,19 +234,24 @@ public class Controller{
     public void moveDown(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() > 5)) {
             drone.setAltitude(-5);
+            drone.setWidth(-2);
+            drone.setHeight(-2);
             drone.drawDrone(canvasCanvas);
             droneCommand("down 40");
             sliderAltitude.setValue(drone.getAltitude());
             setColor(buttonDown, 1);
         } else{
             setColor(buttonDown, 0);
-            System.out.println("Cannot moveDown. Drone is too close to the ground");
+            System.out.print("Cannot moveDown. ");
+            buttonFire(buttonLand);
         }
     }
 
     public void moveUp(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying() && (sliderAltitude.getValue() < 100)) {
             drone.setAltitude(5);
+            drone.setWidth(2);
+            drone.setHeight(2);
             drone.drawDrone(canvasCanvas);
             droneCommand("up 40");
             sliderAltitude.setValue(drone.getAltitude());
@@ -280,8 +291,8 @@ public class Controller{
     public void land(MouseEvent mouseEvent) throws UnknownHostException {
         if(drone.isFlying()) {
             drone.overWriteAltitude(0);
-            drone.setWidth(-drone.getWidth()/2);
-            drone.setHeight(-drone.getHeight()/2);
+            drone.overWriteWidth(initialDroneWidth);
+            drone.overWriteHeight(initialDroneHeight);
             drone.drawDrone(canvasCanvas);
             sliderAltitude.setValue(drone.getAltitude());
             drone.setFlying(false);
@@ -289,13 +300,13 @@ public class Controller{
             setColor(buttonLand, 1);
         } else{
             setColor(buttonLand, 0);
-            System.out.println("Cannot land. Drone is not flying");
+            System.out.println("Drone is not flying");
         }
     }
 
     public void droneCommand(String command) throws UnknownHostException {
-//        UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
-//        loggedPackages.addAll(takeOffPackage);
+        UdpPackage takeOffPackage = new UdpPackage(command, InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+        loggedPackages.addAll(takeOffPackage);
         tableViewColumns.getSortOrder().add(tableColumnTime);
     }
 
@@ -305,7 +316,7 @@ public class Controller{
                 true, true, true, true, true, true, null));
     }
 
-    public void receiveMsg(String msg, UdpPackage udpPackage) {
+    public void getDataFromUdpPackageReceiver(String msg) {
         System.out.println(msg + "..");
         if (msg.substring(0,7).equals("takeoff")){
             buttonFire(buttonTakeOff);

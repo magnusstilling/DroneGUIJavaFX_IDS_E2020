@@ -1,7 +1,6 @@
 package sample;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,10 +16,6 @@ public class UdpPackage {
 
     public UdpPackage(String data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
         this(data.getBytes(), fromIp, toIp,  formPort,  toPort);
-    }
-
-    public UdpPackage(String name, byte[] data, String fromIp, String toIp, int formPort, int toPort) throws UnknownHostException {
-        this(data, InetAddress.getByName(fromIp), InetAddress.getByName(toIp),  formPort,  toPort);
     }
 
     public UdpPackage(byte[] data, InetAddress fromIp, InetAddress toIp, int formPort, int toPort) {
