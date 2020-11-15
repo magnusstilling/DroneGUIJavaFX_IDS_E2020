@@ -203,9 +203,6 @@ public class Controller{
     public void rotateRight(MouseEvent mouseEvent) throws UnknownHostException, IOException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas, 45, "right");
-            if (drone.getAngle() == 360){
-                drone.overWriteAngle(0);
-            }
             droneCommandSender("cw 45");
             setColor(buttonRotateRight, 1);
             System.out.println("Drone rotated Right");
@@ -218,9 +215,6 @@ public class Controller{
     public void rotateLeft(MouseEvent mouseEvent) throws UnknownHostException, IOException {
         if(drone.isFlying()) {
             drone.rotateDrone(canvasCanvas,45,"left");
-            if (drone.getAngle() == -360){
-                drone.overWriteAngle(0);
-            }
             droneCommandSender("ccw 45");
             setColor(buttonRotateLeft, 1);
             System.out.println("Drone rotated Left");
@@ -265,7 +259,7 @@ public class Controller{
 
     public void flipLeft(MouseEvent mouseEvent) throws UnknownHostException, IOException {
         if(drone.isFlying() && (sliderAltitude.getValue() >= 50)){
-            drone.setX(-50);
+            drone.setX(-100);
             drone.drawDrone(canvasCanvas);
             droneCommandSender("flip l");
             setColor(buttonFlipLeft, 1);
@@ -277,7 +271,7 @@ public class Controller{
 
     public void flipRight(MouseEvent mouseEvent) throws UnknownHostException, IOException {
         if(drone.isFlying() && (sliderAltitude.getValue() >= 50)){
-            drone.setX(50);
+            drone.setX(100);
             drone.drawDrone(canvasCanvas);
             droneCommandSender("flip r");
             setColor(buttonFlipRight, 1);

@@ -1,8 +1,10 @@
 package sample;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.util.Duration;
 
 public class Drone {
 
@@ -84,6 +86,9 @@ public class Drone {
     public void setAngle(double angle) {
         this.angle += angle;
         System.out.println("new angle: " + this.angle);
+        if(this.getAngle() >= 360 || this.getAngle() <= -360){
+            this.angle = 0;
+        }
     }
     public void overWriteAngle(double i){
         this.angle = i;
@@ -134,9 +139,5 @@ public class Drone {
         droneShape.translate(-this.rotationCenterX, -this.rotationCenterY);
         droneShape.drawImage(droneImage, this.x, this.y, this.width, this.height);
 
-    }
-
-    public void flipDrone(Canvas canvasCanvas, String leftOrRight){
-        //Måske java animations?
     }
 }
